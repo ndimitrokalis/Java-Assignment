@@ -1,0 +1,2 @@
+Thu May 16 12:24:00 EEST 2024,Player, Duplicate entry 'nick' for key 'players.unique_username'
+Thu May 16 12:49:18 EEST 2024,API, no protocol: /https://opentdb.com/api.php?amount=10
