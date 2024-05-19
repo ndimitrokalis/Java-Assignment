@@ -17,8 +17,10 @@ import java.util.List;
  */
 
 public class API {
+    /** Initializes the ErrorLogger */
     private ErrorLogger errorLogger;
 
+    /** Creates a new instance of the ErrorLogger */
     public API() {
         errorLogger = new ErrorLogger();
     }
@@ -30,10 +32,10 @@ public class API {
      * @return The Quiz list.
      */
 
-    public List<Quiz> apiReader() {
+    public List<Quiz> apiReader(String category) {
         List<Quiz> quizList = new ArrayList<>();
         try {
-            URL url = new URL("https://opentdb.com/api.php?amount=10");
+            URL url = new URL("https://opentdb.com/api.php?amount=10" + category);
             InputStreamReader isr = new InputStreamReader(url.openStream());
             JSONParser jp = new JSONParser();
             JSONObject jo = (JSONObject) jp.parse(isr);

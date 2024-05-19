@@ -9,6 +9,8 @@ import java.util.List;
  */
 
 public class Game {
+    /** Holds the url value for the selected category */
+    private String selectedCategory;
     /** List of quizzes for the game */
     private List<Quiz> quizList;
     /** Player currently playing */
@@ -28,9 +30,18 @@ public class Game {
      */
     public void startGame() {
         API api = new API();
-        quizList = api.apiReader();
+        quizList = api.apiReader(selectedCategory);
         gameScore = 0;
         current = 0;
+    }
+
+    /**
+     * Gets the url value of the player's selected category
+     * @param categories The List of categories
+     * @param choice The player's choice
+     */
+    public void selectCategory(List<QuizCategories> categories, int choice) {
+        selectedCategory = categories.get(choice - 1).getApi_url();
     }
 
     /**

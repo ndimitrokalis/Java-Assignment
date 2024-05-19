@@ -15,12 +15,19 @@ import java.util.List;
  */
 
 public class Player {
+    /** Initializes and gets the connection from the Database */
     private Connection c = Database.getConnection();
+    /** Initializes and creates new instance of the ErrorLogger */
     private ErrorLogger errorLogger = new ErrorLogger();
+    /** Initializes the game */
     private Game game;
+    /** The new player's id */
     private int id;
+    /** The new player's username */
     private String username;
+    /** The new player's password */
     private String password;
+    /** The new player's score */
     private int score;
 
     /**
@@ -192,6 +199,31 @@ public class Player {
         return averageScores;
     }
 
+    /**
+     * Gets the available categories of quizzes and puts them in a list
+     * @return The list of categories
+     */
+    public List<QuizCategories> getCategories() {
+        List<QuizCategories> categories = new ArrayList<>();
+        String query = "SELECT * FROM categories";
+        try {
+            PreparedStatement st = c.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+            while(rs.next()) {
+                int category_id = rs.getInt("category_id");
+                String category = rs.getString("category");
+                String api_url = rs.getString("api_url");
+
+                QuizCategories aCategory = new QuizCategories(category_id, category, api_url);
+                categories.add(aCategory);
+            }
+        } catch (SQLException e) {
+            errorLogger.error(new Date() + "," + getClass().getSimpleName() + ", " + e.getMessage());
+            System.out.println("\nError: loading categories");
+        }
+        return categories;
+    }
+
     /** Sets the game as the current running game */
     public void setGame(Game game) {
         this.game = game;
@@ -201,4 +233,6 @@ public class Player {
     public int getScore() {
         return score;
     }
+
+
 }

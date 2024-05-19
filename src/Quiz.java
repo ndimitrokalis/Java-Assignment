@@ -88,6 +88,7 @@ public class Quiz {
     }
 
     /**
+     * Not currently used
      * Gives the difficulty of the question
      * @return the difficulty
      */
@@ -96,6 +97,7 @@ public class Quiz {
     }
 
     /**
+     * Not currently used
      * Gives the category of the question
      * @return the category
      */

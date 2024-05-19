@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -68,6 +69,24 @@ public class CmdUI {
     }
 
     /**
+     * Displays the available categories and asks the player
+     * to choose, it then calls the selectCategory method from
+     * player class providing with the list of categories and
+     * the player's choice
+     */
+    public void DisplayCategory() {
+        System.out.println();
+        List<QuizCategories> categories = player.getCategories();
+        for (QuizCategories aCategory : categories) {
+            System.out.println(aCategory.getCategory_id() + ") " + aCategory.getCategory());
+        }
+        System.out.print("\nSelect: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        game.selectCategory(categories, choice);
+    }
+
+    /**
      * Lists the user's game history
      */
     public void showPlayerHistory() {
@@ -133,6 +152,7 @@ public class CmdUI {
                             option1 = playerMenu();
                             switch (option1) {
                                 case 1:
+                                    DisplayCategory();
                                     String response;
                                     do {
                                         game.startGame();
@@ -151,10 +171,10 @@ public class CmdUI {
                                     showPlayerHistory();
                                     break;
                                 case 3:
-                                    int option2;
+                                    int option3;
                                     do {
-                                        option2 = statisticsMenu();
-                                        switch (option2) {
+                                        option3 = statisticsMenu();
+                                        switch (option3) {
                                             case 1:
                                                 System.out.println("\n     SCOREBOARD");
                                                 System.out.println("\n#  Player / Score");
@@ -178,7 +198,7 @@ public class CmdUI {
                                                 }
                                                 break;
                                         }
-                                    } while (option2 != 0);
+                                    } while (option3 != 0);
                             }
                         } while (option1 != 0);
                     } else {
