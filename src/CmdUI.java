@@ -1,3 +1,4 @@
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -6,6 +7,8 @@ import java.util.Scanner;
  */
 
 public class CmdUI {
+    /** Initializes and creates new instance of the ErrorLogger */
+    private ErrorLogger errorLogger;
     /** reads user input from the command line */
     private Scanner scanner;
     /** game logic */
@@ -19,53 +22,89 @@ public class CmdUI {
     public CmdUI() {
         game = new Game();
         scanner = new Scanner(System.in);
+        errorLogger = new ErrorLogger();
+    }
+
+    /**
+     * Gets user's choice as integer
+     * @return the choice
+     */
+    public int userInputInt() {
+        try {
+            System.out.print("\nSelect: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            return choice;
+        } catch (Exception e) {
+            errorLogger.error(new Date() + "," + getClass().getSimpleName() + ", " + e.getMessage());
+            scanner.nextLine();
+            return -1;
+        }
+    }
+
+    /**
+     * Gets user's choice as string
+     * @return the choice
+     */
+    public String userInputString() {
+        String choice = scanner.next();
+        return choice;
     }
 
     /**
      * Displays the login menu, giving player the choice to
      * either create an account or login to an existing one
-     * @return the user's choice
      */
-    public int loginMenu() {
+    public void loginMenu() {
         System.out.println("\n1. Login");
         System.out.println("2. Register");
         System.out.println("0. EXIT");
-        System.out.print("\nSelect: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        return choice;
+
     }
 
     /**
      * Displays the game menu, providing the player
      * the option to start the game or view his or other player's stats
-     * @return the user's choice
      */
-    public int playerMenu() {
+    public void playerMenu() {
         System.out.println("\n1. Play");
         System.out.println("2. Game History");
         System.out.println("3. Scoreboards");
         System.out.println("0. LOG OUT");
-        System.out.print("\nSelect: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        return choice;
     }
 
     /**
      * Displays the statistics menu and the option
      * to check the scoreboard for either highest score
      * or highest consistency
-     * @return the user's choice
      */
-    public int statisticsMenu() {
+    public void statisticsMenu() {
         System.out.println("\n1. Best scores");
         System.out.println("2. Most consistent players");
         System.out.println("0. GO BACK");
-        System.out.print("\nSelect: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        return choice;
+    }
+
+    /**
+     * Displays the multiple choice question
+     * along with its possible answers and current score
+     */
+    public void DisplayMC() {
+        int index = 1;
+        System.out.println("\n" + game.getCurrentQuestion() + "\n");
+        for (String item : game.getChoices()) {
+            System.out.println(index + ") " + item);
+            index++;
+        }
+        System.out.println("\nCurrent score: " + game.getScore());
+    }
+
+    /**
+     * Displays the True or False question and current score
+     */
+    public void DisplayTOF() {
+        System.out.println("\n" + game.getCurrentQuestion());
+        System.out.println("\nTrue or False ?");
+        System.out.println("\nCurrent score: " + game.getScore());
     }
 
     /**
@@ -77,12 +116,19 @@ public class CmdUI {
     public void DisplayCategory() {
         System.out.println();
         List<QuizCategories> categories = player.getCategories();
+        System.out.println("Choose the category of questions:\n");
         for (QuizCategories aCategory : categories) {
             System.out.println(aCategory.getCategory_id() + ") " + aCategory.getCategory());
         }
-        System.out.print("\nSelect: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        int choice = userInputInt();
+        while (choice < 1 || choice > player.getCategories().size()) {
+            System.out.println("\nChoose the category of questions:\n");
+            for (QuizCategories aCategory : categories) {
+                System.out.println(aCategory.getCategory_id() + ") " + aCategory.getCategory());
+            }
+            System.out.println("\nInvalid choice");
+            choice = userInputInt();
+        }
         game.selectCategory(categories, choice);
     }
 
@@ -108,31 +154,37 @@ public class CmdUI {
      * or True or False
      */
     public void nextQuestion() {
-        System.out.println("\n" + game.getCurrentQuestion());
+        String answer;
+        game.getCurrentPossibleAnswers();
         if (game.checkType()) {
-            System.out.print("\n");
-            int index = 1;
-            for (String item : game.getChoices()) {
-                System.out.println(index + ") " + item);
-                index++;
+            DisplayMC();
+            int choice = userInputInt();
+            while (choice < 1 || choice > game.getChoices().size()) {
+                DisplayMC();
+                System.out.println("\nInvalid choice");
+                choice = userInputInt();
             }
+            answer = game.getChoices().get(choice - 1).toLowerCase();
         } else {
-            System.out.println("\nTrue or False ?");
+            DisplayTOF();
+            System.out.print("\nAnswer: ");
+            String choice = userInputString().toLowerCase();
+            while (!choice.equals("true") && !choice.equals("false")) {
+                DisplayTOF();
+                System.out.println("\nPlease enter a valid answer");
+                System.out.print("\nAnswer: ");
+                choice = userInputString().toLowerCase();
+            }
+            answer = choice;
         }
-        System.out.println("\nCurrent score: " + game.getScore());
-        System.out.print("\nAnswer: ");
-        String answer = scanner.nextLine();
         game.checkCurrentAnswer(answer);
     }
 
     /**
      * Asks the player if they wish to play another round
-     * @return the user's response for yes or no as "y" or "n"
      */
-    public String playAgain() {
+    public void playAgain() {
         System.out.print("\nPlay Again (y/n): ");
-        String response = scanner.nextLine();
-        return response;
     }
 
     /**
@@ -143,20 +195,22 @@ public class CmdUI {
         System.out.println("WELCOME TO THE ULTIMATE QUIZ GAME\n");
         System.out.println("Login or create an account to continue\n");
         do {
-            choice = loginMenu();
+            loginMenu();
+            choice = userInputInt();
             switch (choice) {
                 case 1:
                     if (login()) {
                         int option1;
                         do {
-                            option1 = playerMenu();
+                            playerMenu();
+                            option1 = userInputInt();
                             switch (option1) {
                                 case 1:
-                                    DisplayCategory();
                                     String response;
                                     do {
+                                        DisplayCategory();
                                         game.startGame();
-                                        for (int i = 0; i < 10; i++) {
+                                        for (int i = 0; i < game.getGameSize(); i++) {
                                             nextQuestion();
                                         }
                                         System.out.println("\nFinal score: " + game.getScore());
@@ -164,7 +218,8 @@ public class CmdUI {
                                         player.saveGame();
                                         player.loadPlayer();
                                         game.resetScore();
-                                        response = playAgain();
+                                        playAgain();
+                                        response = userInputString();
                                     } while (response.equals("y"));
                                     break;
                                 case 2:
@@ -173,7 +228,8 @@ public class CmdUI {
                                 case 3:
                                     int option3;
                                     do {
-                                        option3 = statisticsMenu();
+                                        statisticsMenu();
+                                        option3 = userInputInt();
                                         switch (option3) {
                                             case 1:
                                                 System.out.println("\n     SCOREBOARD");
@@ -197,8 +253,16 @@ public class CmdUI {
                                                     position2++;
                                                 }
                                                 break;
+                                            case 0:
+                                                break;
+                                            default:
+                                                System.out.println("\nPlease enter a valid choice");
                                         }
                                     } while (option3 != 0);
+                                case 0:
+                                    break;
+                                default:
+                                    System.out.println("\nPlease enter a valid choice");
                             }
                         } while (option1 != 0);
                     } else {
@@ -209,6 +273,10 @@ public class CmdUI {
                 case 2:
                     register();
                     break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("\nPlease enter a valid choice");
             }
         } while (choice != 0);
         System.out.println("\nThank you for playing <3");
@@ -222,9 +290,9 @@ public class CmdUI {
      */
     public void register() {
         System.out.print("\nGive Username: ");
-        String username = scanner.nextLine();
+        String username = userInputString();
         System.out.print("Give Password: ");
-        String password = scanner.next();
+        String password = userInputString();
         player = new Player(username, password);
         player.saveNewPlayer();
     }
@@ -236,9 +304,9 @@ public class CmdUI {
      */
     public boolean login() {
         System.out.print("\nUsername: ");
-        String username = scanner.nextLine();
+        String username = userInputString();
         System.out.print("Password: ");
-        String password = scanner.nextLine();
+        String password = userInputString();
         player = new Player(username, password);
         boolean ok = player.loadPlayer();
         game.setPlayer(player);

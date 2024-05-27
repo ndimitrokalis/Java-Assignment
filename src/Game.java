@@ -13,6 +13,8 @@ public class Game {
     private String selectedCategory;
     /** List of quizzes for the game */
     private List<Quiz> quizList;
+    /** List of possible answers to multiple choice questions */
+    private List<String> choices;
     /** Player currently playing */
     private Player player;
     /** The score of the current game */
@@ -33,6 +35,14 @@ public class Game {
         quizList = api.apiReader(selectedCategory);
         gameScore = 0;
         current = 0;
+    }
+
+    /**
+     * Gets the game size
+     * @return the size
+     */
+    public int getGameSize() {
+        return quizList.size();
     }
 
     /**
@@ -57,7 +67,6 @@ public class Game {
      * @return the possible answers
      */
     public List<String> getChoices() {
-        List<String> choices = quizList.get(current).getPossibleAnswers();
         return choices;
     }
 
@@ -67,6 +76,13 @@ public class Game {
      */
     public String getCurrentQuestion() {
         return "Q" + (current+1) + ": " + quizList.get(current).getQuestion();
+    }
+
+    /**
+     * Gets possible answers for the current question
+     */
+    public void getCurrentPossibleAnswers() {
+        choices = quizList.get(current).getPossibleAnswers();
     }
 
     /**

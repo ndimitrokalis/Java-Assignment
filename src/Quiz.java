@@ -84,7 +84,7 @@ public class Quiz {
      * @return true if is correct or false otherwise
      */
     public boolean isCorrect(String answer) {
-        return this.correctAnswer.equals(answer);
+        return this.correctAnswer.toLowerCase().equals(answer);
     }
 
     /**

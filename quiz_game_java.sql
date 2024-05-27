@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 20, 2024 at 12:13 AM
+-- Generation Time: May 26, 2024 at 05:31 PM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.13
 
@@ -33,37 +33,38 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `category` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `api_url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `categories`
 --
 
 INSERT INTO `categories` (`category_id`, `category`, `api_url`) VALUES
-(1, 'General knowledge', '&category=9'),
-(2, 'Entertainment: Books', '&category=10'),
-(3, 'Entertainment: Film', '&category=11'),
-(4, 'Entertainment: Music', '&category=12'),
-(5, 'Entertainment: Musicals & Theatres', '&category=13'),
-(6, 'Entertainment: Television', '&category=14'),
-(7, 'Entertainment: Video Games', '&category=15'),
-(8, 'Entertainment: Board Games', '&category=16'),
-(9, 'Entertainment: Comics', '&category=29'),
-(10, 'Entertainment: Japanese Anime & Manga', '&category=31'),
-(11, 'Entertainment: Cartoon & Animations', '&category=32'),
-(12, 'Science & Nature', '&category=17'),
-(13, 'Science: Computers', '&category=18'),
-(14, 'Science: Mathematics', '&category=19'),
-(15, 'Science: Gadgets', '&category=30'),
-(16, 'Mythology', '&category=20'),
-(17, 'Sports', '&category=21'),
-(18, 'Geography', '&category=22'),
-(19, 'History', '&category=23'),
-(20, 'Politics', '&category=24'),
-(21, 'Art', '&category=25'),
-(22, 'Celebrities', '&category=26'),
-(23, 'Animals', '&category=27'),
-(24, 'Vehicles', '&category=28');
+(1, 'All', ''),
+(2, 'General knowledge', '&category=9'),
+(3, 'Entertainment: Books', '&category=10'),
+(4, 'Entertainment: Film', '&category=11'),
+(5, 'Entertainment: Music', '&category=12'),
+(6, 'Entertainment: Musicals & Theatres', '&category=13'),
+(7, 'Entertainment: Television', '&category=14'),
+(8, 'Entertainment: Video Games', '&category=15'),
+(9, 'Entertainment: Board Games', '&category=16'),
+(10, 'Entertainment: Comics', '&category=29'),
+(11, 'Entertainment: Japanese Anime & Manga', '&category=31'),
+(12, 'Entertainment: Cartoon & Animations', '&category=32'),
+(13, 'Science & Nature', '&category=17'),
+(14, 'Science: Computers', '&category=18'),
+(15, 'Science: Mathematics', '&category=19'),
+(16, 'Science: Gadgets', '&category=30'),
+(17, 'Mythology', '&category=20'),
+(18, 'Sports', '&category=21'),
+(19, 'Geography', '&category=22'),
+(20, 'History', '&category=23'),
+(21, 'Politics', '&category=24'),
+(22, 'Art', '&category=25'),
+(23, 'Celebrities', '&category=26'),
+(24, 'Animals', '&category=27'),
+(25, 'Vehicles', '&category=28');
 
 -- --------------------------------------------------------
 
@@ -80,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `history` (
   `player_id` int NOT NULL,
   PRIMARY KEY (`game_id`),
   KEY `player_id` (`player_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `history`
@@ -92,12 +93,22 @@ INSERT INTO `history` (`game_id`, `username`, `date`, `score`, `player_id`) VALU
 (3, 'Nick', '2024-05-15 12:19:28', 3, 1),
 (13, 'Nick', '2024-05-17 00:56:26', 4, 1),
 (14, 'Nick', '2024-05-18 17:21:51', 0, 1),
-(15, 'Test', '2024-05-18 19:48:38', 0, 3),
 (16, 'Nick', '2024-05-19 19:32:08', 0, 1),
 (17, 'Nick', '2024-05-19 19:33:25', 0, 1),
 (18, 'Nick', '2024-05-19 22:49:31', 0, 1),
 (19, 'Nick', '2024-05-19 22:50:32', 0, 1),
-(20, 'Nick', '2024-05-20 01:37:45', 0, 1);
+(20, 'Nick', '2024-05-20 01:37:45', 0, 1),
+(21, 'Nick', '2024-05-24 17:33:46', 0, 1),
+(22, 'Nick', '2024-05-25 03:47:44', 4, 1),
+(23, 'Nick', '2024-05-25 03:48:29', 5, 1),
+(24, 'Nick', '2024-05-26 17:43:55', 6, 1),
+(25, 'Nick', '2024-05-26 18:53:15', 1, 1),
+(26, 'Nick', '2024-05-26 18:53:43', 4, 1),
+(27, 'Test', '2024-05-26 20:16:02', 1, 3),
+(28, 'Nick', '2024-05-26 20:19:01', 4, 1),
+(29, 'Nick', '2024-05-26 20:20:34', 1, 1),
+(30, 'Nick', '2024-05-26 20:20:49', 3, 1),
+(31, 'Nick', '2024-05-26 20:21:07', 4, 1);
 
 -- --------------------------------------------------------
 
@@ -113,16 +124,16 @@ CREATE TABLE IF NOT EXISTS `players` (
   `score` int NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `players`
 --
 
 INSERT INTO `players` (`id`, `username`, `password`, `score`) VALUES
-(1, 'Nick', '$2a$12$di0zWz8Ynx4llClR2fXJ2OUK9sGVg48CNYpJXHS7IMC5FRfaizhGq', 10),
+(1, 'Nick', '$2a$12$di0zWz8Ynx4llClR2fXJ2OUK9sGVg48CNYpJXHS7IMC5FRfaizhGq', 42),
 (2, 'Anna', '$2a$12$6ncxO33gGQi2hx3lt2E4Pu03GArdjaz5Upw4ECzPNDrVnrEiNq6K.', 1),
-(3, 'Test', '$2a$12$AKCP0Qh8jf0duktlvo0zIOuSlZ0JWOTxMV8oqdhff59FnzJM8G342', 0);
+(3, 'Test', '$2a$12$mU1diD3D8/8ePBHrEm9ZSeS3MlrNpOPXjjIrOzY.tkKdB1y/1hnNu', 1);
 
 --
 -- Constraints for dumped tables
